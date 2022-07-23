@@ -1,0 +1,37 @@
+﻿<Window x:Class="Company.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Company.WPF"
+        xmlns:cdm="clr-namespace:Company.WPF.Infrastructure.Commands"
+        xmlns:viewmodel="clr-namespace:Company.WPF.ViewModels"
+        xmlns:view="clr-namespace:Company.WPF.Views"
+        DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
+        mc:Ignorable="d"
+        Style="{StaticResource CompanyWindowsStyle}"
+        Title="{Binding Title}"
+        Height="720" Width="1280">
+    <DockPanel>
+        <DockPanel.Resources>
+            <Style TargetType="{x:Type Menu}">
+                <Setter Property="Margin" Value="0, 3"></Setter>
+            </Style>
+        </DockPanel.Resources>
+        <Menu DockPanel.Dock="Top" FontSize="14">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Выход" Command="{StaticResource CloseWindowsCommand}" />
+            </MenuItem>
+            <MenuItem Header="Сервис">
+            </MenuItem>
+            <MenuItem Header="Помощь">
+                <MenuItem Header="О программе"/>
+            </MenuItem>
+        </Menu>
+        <TabControl TabStripPlacement="Left">
+            <TabItem Header="Сканер" Style="{StaticResource TabKeyVert}">
+                <view:ParserView VerticalAlignment="Top" DataContext="{Binding SettingParser}" />
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
