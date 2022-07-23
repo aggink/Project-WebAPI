@@ -1,0 +1,19 @@
+﻿<Application x:Class="Company.WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Company.WPF"
+             xmlns:vm="clr-namespace:Company.WPF.ViewModels"
+             xmlns:vmb="clr-namespace:Company.WPF.ViewModels.Base"
+             StartupUri="Views\MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources\Commands.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Resources\Styles\WindowsStyle.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <vmb:Locator x:Key="Locator" />
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
