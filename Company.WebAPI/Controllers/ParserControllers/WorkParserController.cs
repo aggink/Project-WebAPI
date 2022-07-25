@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Company.WebAPI.Controllers.ParserControllers;
 
 [ApiController]
+[Produces("application/json")]
 [Route("parser/work")]
 public class WorkParserController : Controller
 {

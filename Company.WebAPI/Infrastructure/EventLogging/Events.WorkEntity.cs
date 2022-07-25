@@ -24,7 +24,7 @@ public static partial class Events
         LoggerMessage.Define<string>(
             LogLevel.Critical,
             EntitySaveFailedId,
-            "Entity creation error: {entityName}");
+            "TEntity creation error: {entityName}");
 
     public static void EntitySaveFailed(this ILogger logger, string entityName, Exception? exception) => EntitySaveFailedExecute(logger, entityName, exception);
 
@@ -34,7 +34,7 @@ public static partial class Events
         LoggerMessage.Define<string>(
             LogLevel.Critical,
             EntityUpdateFaildedId,
-            "Entity update error: {entityName}");
+            "TEntity update error: {entityName}");
 
     public static void EntityUpdateFailed(this ILogger logger, string entityName, Exception? exception) => EntityUpdateFailedExecute(logger, entityName, exception);
 

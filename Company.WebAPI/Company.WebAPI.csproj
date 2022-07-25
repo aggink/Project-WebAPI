@@ -28,10 +28,4 @@
     <ProjectReference Include="..\Company.Data\Company.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\ProductControllers\" />
-    <Folder Include="Infrastructure\Managers\ProductManagers\" />
-    <Folder Include="Infrastructure\Providers\ProductProviders\" />
-  </ItemGroup>
-
 </Project>

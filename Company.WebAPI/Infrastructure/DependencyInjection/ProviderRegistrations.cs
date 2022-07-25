@@ -1,5 +1,8 @@
-﻿using Company.WebAPI.Infrastructure.Providers.ParserProviders;
+﻿using Company.Entity.Products;
+using Company.WebAPI.Infrastructure.Providers.ParserProviders;
 using Company.WebAPI.Infrastructure.Providers.ParserProviders.Interfaces;
+using Company.WebAPI.Infrastructure.Providers.ProductProviders;
+using Company.WebAPI.Infrastructure.Providers.ProductProviders.Interfaces;
 
 namespace Company.WebAPI.Infrastructure.DependencyInjection;
 
@@ -9,7 +12,7 @@ namespace Company.WebAPI.Infrastructure.DependencyInjection;
 public partial class DependencyContainer
 {
     /// <summary>
-    /// Registration Entity Managers
+    /// Registration TEntity Managers
     /// </summary>
     /// <param name="services"></param>
     public static void EntityProviders(IServiceCollection services)
@@ -17,5 +20,11 @@ public partial class DependencyContainer
         services.AddTransient<IFieldParserProvider, FieldParserProvider>();
         services.AddTransient<IPropertyParserProvider, PropertyParserProvider>();
         services.AddTransient<IWorkParserProvider, WorkParserProvider>();
+
+        services.AddTransient<IProductProvider<BulatProduct>, BulatProductProvider>();
+        services.AddTransient<IProductProvider<RamisProduct>, RamisProductProvider>();
+        services.AddTransient<IProductProvider<ZipZipProduct>, ZipZipProductProvider>(); 
+        services.AddTransient<IProductProvider<ChipCartProduct>, ChipCartProductProvider>();
+
     }
 }

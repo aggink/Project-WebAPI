@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Company.WebAPI.Controllers.ParserControllers;
 
 [ApiController]
+[Produces("application/json")]
 [Route("parser/setting")]
 public class PropertyParserController : Controller
 {
@@ -50,7 +51,7 @@ public class PropertyParserController : Controller
         var result = await _manager.GetAllAsync();
         if(result == null) return BadRequest();
 
-        return Ok();
+        return Json(result);
     }
 
     [HttpGet("{id}")]
@@ -59,6 +60,6 @@ public class PropertyParserController : Controller
         var result = await _manager.GetByIdAsync(id);
         if (result == null) return BadRequest();
 
-        return Ok();
+        return Json(result);
     }
 }
