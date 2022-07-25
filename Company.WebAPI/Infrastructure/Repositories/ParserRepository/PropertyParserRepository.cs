@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Company.WebAPI.Infrastructure.Repositories.ParserRepository;
 
-public class PropertyParserRepository : BaseRepository<ProductDbContext, PropertyParser>
+public class PropertyParserRepository : BaseRepository<ParserDbContext, PropertyParser>
 {
     public PropertyParserRepository(
-        IUnitOfWork<ProductDbContext> unitOfWork, 
-        ILogger<BaseRepository<ProductDbContext, PropertyParser>> logger) 
+        IUnitOfWork<ParserDbContext> unitOfWork, 
+        ILogger<BaseRepository<ParserDbContext, PropertyParser>> logger) 
         : base(unitOfWork, logger)
     {
     }

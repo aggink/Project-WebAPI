@@ -1,7 +1,7 @@
 ﻿using Company.WebAPI.Infrastructure.Managers.ParserManagers;
 using Company.WebAPI.Infrastructure.Managers.ParserManagers.Interfaces;
 using Company.WebAPI.Infrastructure.Managers.ProductManagers;
-using Company.WebAPI.Infrastructure.Managers.ProductManagers.Interfaces;
+using Company.WebAPI.Infrastructure.Managers.ProductManagers.Base;
 using Company.WebAPI.ViewModels.ProductViewModels.BulatProductViewModels;
 using Company.WebAPI.ViewModels.ProductViewModels.ChipCartProductViewModels;
 using Company.WebAPI.ViewModels.ProductViewModels.RamisProductViewModels;

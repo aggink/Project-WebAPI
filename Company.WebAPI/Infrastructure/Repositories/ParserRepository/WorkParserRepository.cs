@@ -5,11 +5,11 @@ using Company.WebAPI.Infrastructure.Repositories.Base;
 
 namespace Company.WebAPI.Infrastructure.Repositories.ParserRepository;
 
-public class WorkParserRepository : BaseRepository<ProductDbContext, WorkParser>
+public class WorkParserRepository : BaseRepository<ParserDbContext, WorkParser>
 {
     public WorkParserRepository(
-        IUnitOfWork<ProductDbContext> unitOfWork, 
-        ILogger<BaseRepository<ProductDbContext, WorkParser>> logger)
+        IUnitOfWork<ParserDbContext> unitOfWork, 
+        ILogger<BaseRepository<ParserDbContext, WorkParser>> logger)
         : base(unitOfWork, logger)
     {
     }

@@ -1,5 +1,5 @@
 ﻿using Company.WebAPI.Controllers.ProductControllers.Base;
-using Company.WebAPI.Infrastructure.Managers.ProductManagers.Interfaces;
+using Company.WebAPI.Infrastructure.Managers.ProductManagers.Base;
 using Company.WebAPI.ViewModels.ProductViewModels.ChipCartProductViewModels;
 using Microsoft.AspNetCore.Mvc;
 

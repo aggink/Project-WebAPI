@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Calabonga.UnitOfWork;
 using Company.Data.DbContexts;
 using Company.Entity.Parser;
+using Company.WebAPI.Infrastructure.Managers.Base;
 using Company.WebAPI.Infrastructure.Managers.ParserManagers.Interfaces;
 using Company.WebAPI.Infrastructure.Providers.ParserProviders.Interfaces;
 using Company.WebAPI.Infrastructure.Repositories.Base;
@@ -9,40 +9,25 @@ using Company.WebAPI.ViewModels.ParserViewModels.FieldParserViewModels;
 
 namespace Company.WebAPI.Infrastructure.Managers.ParserManagers;
 
-public class FieldParserManager : IFieldParserManager
+public class FieldParserManager 
+    : BaseManager<CreateFieldParserViewModel, UpdateFieldParserViewModel, FieldParserViewModel, FieldParser, ParserDbContext>, 
+    IFieldParserManager
 {
-    private readonly IRepository<ProductDbContext, FieldParser> _repository;
     private readonly IFieldParserProvider _provider;
-    private readonly IMapper _mapper;
 
     public FieldParserManager(
-        IRepository<ProductDbContext, FieldParser> repository,
+        IRepository<ParserDbContext, FieldParser> repository,
         IFieldParserProvider provider, 
-        IMapper mapper)
+        IMapper mapper) : base(repository, mapper)
     {
-        _repository = repository;
         _provider = provider;
-        _mapper = mapper;
     }
-
-    public List<string> Errors { get; private set; } = new List<string>();
 
     public async Task<bool> CreateAsync(IList<CreateFieldParserViewModel> models, string userName)
     {
         bool IsOk = true;
         for (int i = 0; i < models.Count; i++)
-        {
-            var entity = _mapper.Map<CreateFieldParserViewModel, FieldParser>(models[i]);
-            entity.CreatedBy = userName;
-            entity.UpdatedBy = userName;
-
-            var result = await _repository.CreateAsync(entity);
-            if (!result)
-            {
-                Errors.Add("Error while saving data.");
-                IsOk = false;
-            }
-        }
+            IsOk = await base.CreateAsync(models[i], userName);
 
         if (!IsOk) return false;
         return true;
@@ -52,17 +37,7 @@ public class FieldParserManager : IFieldParserManager
     {
         bool IsOk = true;
         for (int i = 0; i < models.Count; i++)
-        {
-            var entity = _mapper.Map<UpdateFieldParserViewModel, FieldParser>(models[i]);
-            entity.UpdatedBy = userName;
-
-            var result = await _repository.CreateAsync(entity);
-            if (!result)
-            {
-                Errors.Add("Error while saving data.");
-                IsOk = false;
-            }
-        }
+            IsOk = await base.UpdateAsync(models[i], userName);
 
         if(!IsOk) return false;
         return true;

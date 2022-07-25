@@ -170,6 +170,8 @@ namespace Company.WebAPI.Infrastructure.Repositories.Base
 
         #endregion
 
+        #region GetById
+
         public async Task<TEntity?> GetByIdAsync(Guid id)
         {
             var entity = await _repository.GetFirstOrDefaultAsync(predicate: x => x.Id.Equals(id));
@@ -179,5 +181,7 @@ namespace Company.WebAPI.Infrastructure.Repositories.Base
             }
             return entity;
         }
+
+        #endregion
     }
 }

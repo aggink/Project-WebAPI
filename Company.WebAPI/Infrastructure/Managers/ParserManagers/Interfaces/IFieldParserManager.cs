@@ -1,11 +1,13 @@
-﻿using Company.WebAPI.ViewModels.ParserViewModels.FieldParserViewModels;
+﻿using Company.WebAPI.Infrastructure.Managers.Base;
+using Company.WebAPI.ViewModels.ParserViewModels.FieldParserViewModels;
 
 namespace Company.WebAPI.Infrastructure.Managers.ParserManagers.Interfaces;
 
 /// <summary>
 /// Интерфейс предоставляющий методы по работе с данными FieldParser
 /// </summary>
-public interface IFieldParserManager
+public interface IFieldParserManager 
+    : IBaseManager<CreateFieldParserViewModel, UpdateFieldParserViewModel, FieldParserViewModel>
 {
     /// <summary>
     /// Создание FieldParser

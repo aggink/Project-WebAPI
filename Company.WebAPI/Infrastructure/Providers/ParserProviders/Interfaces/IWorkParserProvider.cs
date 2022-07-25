@@ -9,7 +9,7 @@ public interface IWorkParserProvider
     /// </summary>
     /// <param name="propertyParserId"></param>
     /// <returns></returns>
-    Task<WorkParser?> GetByPropertyParserAsync(Guid propertyParserId);
+    Task<WorkParser?> GetByParserIdAsync(Guid propertyParserId);
 
     /// <summary>
     /// Получить все сущности со всеми зависимыми полями

@@ -1,12 +1,12 @@
-﻿using Company.WebAPI.Infrastructure.Enums;
-using Company.WebAPI.Infrastructure.Managers.ProductManagers.Interfaces;
+﻿using Company.WebAPI.Controllers.Base;
+using Company.WebAPI.Infrastructure.Enums;
+using Company.WebAPI.Infrastructure.Managers.ProductManagers.Base;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Company.WebAPI.Controllers.ProductControllers.Base;
 
-[ApiController]
-[Produces("application/json")]
-public abstract class BaseProductController<CreateViewModel, UpdateViewModel, ViewModel> : Controller
+public abstract class BaseProductController<CreateViewModel, UpdateViewModel, ViewModel> 
+    : BaseController<CreateViewModel, UpdateViewModel, ViewModel>
     where CreateViewModel : class
     where UpdateViewModel : class
     where ViewModel : class
@@ -14,47 +14,9 @@ public abstract class BaseProductController<CreateViewModel, UpdateViewModel, Vi
     private readonly IProductManager<CreateViewModel, UpdateViewModel, ViewModel> _manager;
 
     public BaseProductController(
-        IProductManager<CreateViewModel, UpdateViewModel, ViewModel> manager)
+        IProductManager<CreateViewModel, UpdateViewModel, ViewModel> manager) : base(manager)
     {
         _manager = manager;
-    }
-
-    private readonly string _userName = "admin";
-
-    [HttpPost]
-    public async Task<IActionResult> Create(CreateViewModel model)
-    {
-        var result = await _manager.CreateAsync(model, _userName);
-        if (!result) return BadRequest();
-
-        return Ok();
-    }
-
-    [HttpPut]
-    public async Task<IActionResult> Update(UpdateViewModel model)
-    {
-        var result = await _manager.UpdateAsync(model, _userName);
-        if (!result) return BadRequest();
-
-        return Ok();
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        var result = await _manager.DeleteAsync(id);
-        if (!result) return BadRequest();
-
-        return Ok();
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id)
-    {
-        var result = await _manager.GetByIdAsync(id);
-        if (result == null) return BadRequest();
-
-        return Json(result);
     }
 
     [HttpGet("{parserid}/{pageindex}/{pagesize}/{conditionsort}/{typesort}")]

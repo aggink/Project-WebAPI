@@ -16,7 +16,7 @@ public class WorkParserProvider : IWorkParserProvider
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<WorkParser?> GetByPropertyParserAsync(Guid propertyParserId)
+    public async Task<WorkParser?> GetByParserIdAsync(Guid propertyParserId)
     {
         return await _unitOfWork.GetRepository<WorkParser>().GetFirstOrDefaultAsync(
             predicate: x => x.PropertyParserId == propertyParserId);

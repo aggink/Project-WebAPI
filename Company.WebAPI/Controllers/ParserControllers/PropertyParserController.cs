@@ -1,4 +1,5 @@
-﻿using Company.WebAPI.Infrastructure.Managers.ParserManagers.Interfaces;
+﻿using Company.WebAPI.Controllers.Base;
+using Company.WebAPI.Infrastructure.Managers.ParserManagers.Interfaces;
 using Company.WebAPI.ViewModels.ParserViewModels.PropertyParserViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,57 +8,19 @@ namespace Company.WebAPI.Controllers.ParserControllers;
 [ApiController]
 [Produces("application/json")]
 [Route("parser/setting")]
-public class PropertyParserController : Controller
+public class PropertyParserController : BaseController<CreatePropertyParserViewModel, UpdatePropertyParserViewModel, PropertyParserViewModel>
 {
     private readonly IPropertyParserManager _manager;
 
-    public PropertyParserController(IPropertyParserManager manager)
+    public PropertyParserController(IPropertyParserManager manager) : base(manager)
     {
         _manager = manager;
     }
 
-    private readonly string _userName = "admin";
-
-    [HttpPost]
-    public async Task<IActionResult> SetPropertyAsync(CreatePropertyParserViewModel model)
-    {
-        var result = await _manager.CreateAsync(model, _userName);
-        if (!result) return BadRequest();
-
-        return Ok();
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePropertyAsync(Guid id)
-    {
-        var result = await _manager.DeleteAsync(id);
-        if(!result) return BadRequest();
-
-        return Ok();
-    }
-
-    [HttpPut]
-    public async Task<IActionResult> UpdatePropertyAsync(UpdatePropertyParserViewModel model)
-    {
-        var result = await _manager.UpdateAsync(model, _userName);
-        if (!result) return BadRequest();
-
-        return Ok();
-    }
-
     [HttpGet]
-    public async Task<IActionResult> GetAllPropertiesAsync()
+    public async Task<IActionResult> GetAllAsync()
     {
         var result = await _manager.GetAllAsync();
-        if(result == null) return BadRequest();
-
-        return Json(result);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetPropertyAsync(Guid id)
-    {
-        var result = await _manager.GetByIdAsync(id);
         if (result == null) return BadRequest();
 
         return Json(result);

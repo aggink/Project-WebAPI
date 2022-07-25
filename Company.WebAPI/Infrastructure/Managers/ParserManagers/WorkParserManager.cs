@@ -12,7 +12,7 @@ namespace Company.WebAPI.Infrastructure.Managers.ParserManagers;
 
 public class WorkParserManager : IWorkParserManager
 {
-    private readonly IRepository<ProductDbContext, WorkParser> _repository;
+    private readonly IRepository<ParserDbContext, WorkParser> _repository;
     private readonly IWorkParserProvider _provider;
     private readonly IMapper _mapper;
 
@@ -20,7 +20,7 @@ public class WorkParserManager : IWorkParserManager
     private readonly IBackgroundTaskQueue<BackgroundParser> _backgroundTaskQueue;
 
     public WorkParserManager(
-        IRepository<ProductDbContext, WorkParser> repository,
+        IRepository<ParserDbContext, WorkParser> repository,
         IWorkParserProvider provider,
         IMapper mapper, 
         BackgroundParser backgroundParser, 
@@ -51,7 +51,7 @@ public class WorkParserManager : IWorkParserManager
     {
         try
         {
-            var entity = await _provider.GetByPropertyParserAsync(propertyParserId);
+            var entity = await _provider.GetByParserIdAsync(propertyParserId);
             if (entity != null) return false;
 
             entity = new WorkParser()
