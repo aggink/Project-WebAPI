@@ -15,8 +15,11 @@ public abstract class BaseHttpClient
     public BaseHttpClient(IConfiguration configuration)
     {
         _Configuration = configuration;
-        _Client = new HttpClient();
         _BaseUrl = configuration["WebService"];
+        _Client = new HttpClient()
+        {
+            BaseAddress = new Uri(_BaseUrl)
+        };
     }
 
     #region Error Message
@@ -129,7 +132,6 @@ public abstract class BaseHttpClient
     {
         Errors.Clear();
 
-        _Client.BaseAddress = new Uri(url);
         _Client.DefaultRequestHeaders.Accept.Clear();
         _Client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue(_MediaType));
