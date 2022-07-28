@@ -1,7 +1,7 @@
 ﻿using Company.Entity.Products;
-using Company.WebAPI.ViewModel.ParserViewModels;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Company.WebAPI.ViewModels.ParserViewModels.PropertyParserViewModels;
 
@@ -11,22 +11,27 @@ public class CreatePropertyParserViewModel : IValidatableObject
 {
     [Required]
     [JsonProperty(PropertyName = "url")]
+    [JsonPropertyName("url")]
     public string URL { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "name_site")]
+    [JsonPropertyName("name_site")]
     public string NameSite { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "company_name")]
+    [JsonPropertyName("company_name")]
     public string CompanyName { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "company_description")]
+    [JsonPropertyName("company_description")]
     public string CompanyDescription { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "type_name")]
+    [JsonPropertyName("type_name")]
     public string TypeName { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

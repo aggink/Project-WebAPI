@@ -1,9 +1,7 @@
-﻿using Company.Data.DbContexts;
-using Company.Entity.Parser;
-using Company.Entity.Products;
-using Company.WebAPI.Infrastructure.Repositories.Base;
+﻿using Company.Entity.Products;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Company.WebAPI.ViewModels.ParserViewModels.FieldParserViewModels;
 
@@ -11,30 +9,24 @@ namespace Company.WebAPI.ViewModels.ParserViewModels.FieldParserViewModels;
 
 public class CreateFieldParserViewModel : IValidatableObject
 {
-    private readonly IRepository<ParserDbContext, PropertyParser> _propertyParserRepository;
-
-    public CreateFieldParserViewModel(
-        IRepository<ParserDbContext, PropertyParser> propertyParserRepository)
-    {
-        _propertyParserRepository = propertyParserRepository;
-    }
-
-    public CreateFieldParserViewModel() { }
-
     [Required]
     [JsonProperty(PropertyName = "property_parser_id")]
+    [JsonPropertyName("property_parser_id")]
     public Guid PropertyParserId { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "property_name")]
+    [JsonPropertyName("property_name")]
     public string PropertyName { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "default_value")]
+    [JsonPropertyName("default_value")]
     public string DefaultValue { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "string_parse")]
+    [JsonPropertyName("string_parse")]
     public string StringParse { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -44,14 +36,6 @@ public class CreateFieldParserViewModel : IValidatableObject
         if(PropertyParserId == Guid.Empty)
         {
             errors.Add(new ValidationResult("Не задано поле.", new[] { nameof(PropertyParserId) }));
-        }
-        else
-        {
-            var result = Task.Run(async () => await _propertyParserRepository.GetByIdAsync(PropertyParserId));
-            if(result == null)
-            {
-                errors.Add(new ValidationResult($"Данного id ({PropertyParserId}) не существует", new[] { nameof(PropertyParserId) }));
-            }
         }
 
         if (string.IsNullOrWhiteSpace(PropertyName))

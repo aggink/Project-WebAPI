@@ -1,9 +1,7 @@
-﻿using Company.Data.DbContexts;
-using Company.Entity.Parser;
-using Company.Entity.Products;
-using Company.WebAPI.Infrastructure.Repositories.Base;
+﻿using Company.Entity.Products;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Company.WebAPI.ViewModels.ParserViewModels.FieldParserViewModels;
 
@@ -11,40 +9,30 @@ namespace Company.WebAPI.ViewModels.ParserViewModels.FieldParserViewModels;
 
 public class UpdateFieldParserViewModel : IValidatableObject
 {
-    private readonly IRepository<ParserDbContext, PropertyParser> _propertyParserRepository;
-    private readonly IRepository<ParserDbContext, FieldParser> _fieldParserRepository;
-    private readonly IRepository<ParserDbContext, WorkParser> _workParserRepository;
-
-    public UpdateFieldParserViewModel(
-        IRepository<ParserDbContext, PropertyParser> propertyParserRepository,
-        IRepository<ParserDbContext, FieldParser> fieldParserRepository,
-        IRepository<ParserDbContext, WorkParser> workParserRepository)
-    {
-        _propertyParserRepository = propertyParserRepository;
-        _fieldParserRepository = fieldParserRepository;
-        _workParserRepository = workParserRepository;
-    }
-
-    public UpdateFieldParserViewModel() { }
 
     [Required]
     [JsonProperty(PropertyName = "id")]
+    [JsonPropertyName("id")]
     public Guid Id { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "property_parser_id")]
+    [JsonPropertyName("property_parser_id")]
     public Guid PropertyParserId { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "property_name")]
+    [JsonPropertyName("property_name")]
     public string PropertyName { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "default_value")]
+    [JsonPropertyName("default_value")]
     public string DefaultValue { get; set; }
 
     [Required]
     [JsonProperty(PropertyName = "string_parse")]
+    [JsonPropertyName("string_parse")]
     public string StringParse { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -55,32 +43,10 @@ public class UpdateFieldParserViewModel : IValidatableObject
         {
             errors.Add(new ValidationResult("Не задано поле.", new[] { nameof(Id) }));
         }
-        else
-        {
-            var result = Task.Run(async () => await _fieldParserRepository.GetByIdAsync(Id));
-            if(result == null)
-            {
-                errors.Add(new ValidationResult($"Данного id ({Id}) не существует", new[] { nameof(Id) }));
-            }
-        }
 
         if (PropertyParserId == Guid.Empty)
         {
             errors.Add(new ValidationResult("Не задано поле.", new[] { nameof(PropertyParserId) }));
-        }
-        else
-        {
-            var result = Task.Run(async () => await _propertyParserRepository.GetByIdAsync(PropertyParserId));
-            if (result == null)
-            {
-                errors.Add(new ValidationResult($"Данного id ({PropertyParserId}) не существует", new[] { nameof(PropertyParserId) }));
-            }
-
-            var work = Task.Run(async () => await _workParserRepository.GetByIdAsync(PropertyParserId));
-            if(work != null)
-            {
-                errors.Add(new ValidationResult($"В настоящее время данные не могут быть изменены. Данные используются в парсере.", new[] { nameof(PropertyParserId) }));
-            }
         }
 
         if (string.IsNullOrWhiteSpace(PropertyName))
