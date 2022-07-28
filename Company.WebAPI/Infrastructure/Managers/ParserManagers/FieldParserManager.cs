@@ -14,20 +14,54 @@ public class FieldParserManager
     IFieldParserManager
 {
     private readonly IFieldParserProvider _provider;
+    private readonly IWorkParserProvider _workParserProvider;
 
     public FieldParserManager(
         IRepository<ParserDbContext, FieldParser> repository,
+        IWorkParserProvider workParserProvider,
         IFieldParserProvider provider, 
         IMapper mapper) : base(repository, mapper)
     {
         _provider = provider;
+        _workParserProvider = workParserProvider;
+    }
+
+    public override async Task<bool> CreateAsync(CreateFieldParserViewModel entity, string userName)
+    {
+        var result = await _workParserProvider.GetByParserIdAsync(entity.PropertyParserId);
+        if (result != null && result.IsStart) return false;
+
+        return await base.CreateAsync(entity, userName);
+    }
+
+    public override async Task<bool> UpdateAsync(UpdateFieldParserViewModel entity, string userName)
+    {
+        var result = await _workParserProvider.GetByParserIdAsync(entity.PropertyParserId);
+        if (result != null && result.IsStart) return false;
+
+        return await base.UpdateAsync(entity, userName);
+    }
+
+    public override async Task<bool> DeleteAsync(Guid id)
+    {
+        var entity = await _repository.GetByIdAsync(id);
+        if (entity == null) return false;
+
+        var result = await _workParserProvider.GetByParserIdAsync(entity.PropertyParserId);
+        if (result != null && result.IsStart) return false;
+
+        return await base.DeleteAsync(id);
     }
 
     public async Task<bool> CreateAsync(IList<CreateFieldParserViewModel> models, string userName)
     {
         bool IsOk = true;
         for (int i = 0; i < models.Count; i++)
-            IsOk = await base.CreateAsync(models[i], userName);
+        {
+            var result = await _workParserProvider.GetByParserIdAsync(models[i].PropertyParserId);
+            if (result != null && result.IsStart) IsOk = false;
+            else IsOk = await base.CreateAsync(models[i], userName);
+        }
 
         if (!IsOk) return false;
         return true;
@@ -37,7 +71,11 @@ public class FieldParserManager
     {
         bool IsOk = true;
         for (int i = 0; i < models.Count; i++)
-            IsOk = await base.UpdateAsync(models[i], userName);
+        {
+            var result = await _workParserProvider.GetByParserIdAsync(models[i].PropertyParserId);
+            if (result != null && result.IsStart) IsOk = false;
+            else IsOk = await base.UpdateAsync(models[i], userName);
+        }
 
         if(!IsOk) return false;
         return true;

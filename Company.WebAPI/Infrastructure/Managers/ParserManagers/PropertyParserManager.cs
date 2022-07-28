@@ -26,19 +26,29 @@ public class PropertyParserManager :
         _workParserProvider = workParserProvider;
     }
 
-    public override async Task<bool> DeleteAsync(Guid id)
+    public override async Task<bool> UpdateAsync(UpdatePropertyParserViewModel entity, string userName)
     {
-        // Проверка - используются ли данные при работе парсера
-        var workParser = await _workParserProvider.GetByParserIdAsync(id);
-        if (workParser != null || workParser!.IsStart)
+        var result = await _workParserProvider.GetByParserIdAsync(entity.Id);
+        if (result != null && result.IsStart)
         {
             Errors.Add("The data cannot be changed at this time. The data is used in the parser.");
             return false;
         }
 
-        await base.DeleteAsync(id);
+        return await base.UpdateAsync(entity, userName);
+    }
 
-        return true;
+    public override async Task<bool> DeleteAsync(Guid id)
+    {
+        // Проверка - используются ли данные при работе парсера
+        var workParser = await _workParserProvider.GetByParserIdAsync(id);
+        if (workParser != null && workParser!.IsStart)
+        {
+            Errors.Add("The data cannot be changed at this time. The data is used in the parser.");
+            return false;
+        }
+
+        return await base.DeleteAsync(id);
     }
 
     public async Task<IList<PropertyParserViewModel>?> GetAllAsync()

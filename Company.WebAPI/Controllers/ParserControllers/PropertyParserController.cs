@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Company.WebAPI.Controllers.ParserControllers;
 
-[ApiController]
-[Produces("application/json")]
 [Route("parser/setting")]
 public class PropertyParserController : BaseController<CreatePropertyParserViewModel, UpdatePropertyParserViewModel, PropertyParserViewModel>
 {

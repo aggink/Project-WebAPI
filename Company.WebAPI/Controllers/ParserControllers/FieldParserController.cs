@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Company.WebAPI.Controllers.ParserControllers;
 
-[ApiController]
-[Produces("application/json")]
 [Route("parser/localsetting")]
 public class FieldParserController : BaseController<CreateFieldParserViewModel, UpdateFieldParserViewModel, FieldParserViewModel>
 {
@@ -18,8 +16,8 @@ public class FieldParserController : BaseController<CreateFieldParserViewModel, 
     }
 
 
-    [HttpPost]
-    public async Task<IActionResult> Create(IList<CreateFieldParserViewModel> models)
+    [HttpPost("CreateFields")]
+    public async Task<IActionResult> CreateFields(IList<CreateFieldParserViewModel> models)
     {
         var result = await _manager.CreateAsync(models, _userName);
         if (!result) return BadRequest();
@@ -27,8 +25,8 @@ public class FieldParserController : BaseController<CreateFieldParserViewModel, 
         return Ok();
     }
 
-    [HttpPut]
-    public async Task<IActionResult> Update(IList<UpdateFieldParserViewModel> models)
+    [HttpPut("UpdateFields")]
+    public async Task<IActionResult> UpdateFields(IList<UpdateFieldParserViewModel> models)
     {
         var result = await _manager.UpdateAsync(models, _userName);
         if(!result) return BadRequest();
@@ -36,7 +34,7 @@ public class FieldParserController : BaseController<CreateFieldParserViewModel, 
         return Ok();
     }
 
-    [HttpGet("parser/{id}")]
+    [HttpGet("GetByParserId/{id}")]
     public async Task<IActionResult> GetByParserIdAsync(Guid id)
     {
         var result = await _manager.GetByPropertyIdAsync(id);
