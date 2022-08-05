@@ -136,4 +136,9 @@ public abstract class BaseHttpClient
         _Client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue(_MediaType));
     }
+
+    ~BaseHttpClient()
+    {
+        _Client.Dispose();
+    }
 }
