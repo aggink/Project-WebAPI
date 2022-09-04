@@ -1,51 +1,52 @@
 using Company.Data.DbInitializers;
+using Company.WebAPI.Infrastructure.Working;
 using Serilog;
 using Serilog.Events;
 
-namespace Company.WebAPI
+namespace Company.WebAPI;
+
+public class Program
 {
-    public class Program
+    public async static Task<int> Main(string[] args)
     {
-        public async static Task<int> Main(string[] args)
+        Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .CreateLogger();
+
+        try
         {
-            Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .Enrich.FromLogContext()
-            .WriteTo.Console()
-            .CreateLogger();
+            Log.Information("Starting web host");
+            var host = CreateHostBuilder(args).Build();
 
-            try
+            using (var scope = host.Services.CreateScope())
             {
-                Log.Information("Starting web host");
-                var host = CreateHostBuilder(args).Build();
+                await DbInitializer.InitializeAsync(scope.ServiceProvider);
+                await scope.ServiceProvider.GetRequiredService<ParserBackgroundWorker>().StartAsync(new CancellationToken());
+                await host.RunAsync();
+            }
 
-                using (var scope = host.Services.CreateScope())
-                {
-                    await DbInitializer.InitializeAsync(scope.ServiceProvider);
-                    await host.RunAsync();
-                }
-
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly");
-                return 1;
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            return 0;
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args)
+        catch (Exception ex)
         {
-            return Host.CreateDefaultBuilder(args)
-                .UseSerilog() // <-- use Serilog
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            Log.Fatal(ex, "Host terminated unexpectedly");
+            return 1;
         }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        return Host.CreateDefaultBuilder(args)
+            .UseSerilog() // <-- use Serilog
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }

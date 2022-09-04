@@ -1,15 +1,16 @@
 ﻿namespace Company.WebAPI.AppStart.Configs;
 
 /// <summary>
-/// Configure pipeline
+/// AddBaseConfigureServices pipeline
 /// </summary>
 public static class ConfigureEndpoints
 {
     /// <summary>
-    /// Configure Routing
+    /// AddBaseConfigureServices Routing
     /// </summary>
-    /// <param name="app"></param>
-    public static void Configure(IApplicationBuilder app)
+    /// <param name="app">Интерфейс, предоставляющий механизмы настройки конвейера запросов приложения.</param>
+    /// <returns>Интерфейс, предоставляющий механизмы настройки конвейера запросов приложения.</returns>
+    public static IApplicationBuilder AddEndpointsConfigure(this IApplicationBuilder app)
     {
         app.UseRouting();
         app.UseAuthentication();
@@ -18,5 +19,7 @@ public static class ConfigureEndpoints
         {
             endpoints.MapControllers();
         });
+
+        return app;
     }
 }

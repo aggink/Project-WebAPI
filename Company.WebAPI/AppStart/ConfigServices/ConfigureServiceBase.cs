@@ -1,52 +1,55 @@
 ﻿using Calabonga.UnitOfWork;
 using Company.Data.DbContexts;
-using Company.WebAPI.Extensions;
+using Company.Parser;
+using Company.Parser.Data;
+using Company.WebAPI.Infrastructure.Working;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Company.WebAPI.AppStart.ConfigServices
+namespace Company.WebAPI.AppStart.ConfigServices;
+
+/// <summary>
+/// Начальные настройки приложения
+/// </summary>
+public static class ConfigureServiceBase
 {
-    public class ConfigureServiceBase
+    /// <summary>
+    /// AddBaseConfigureServices Services
+    /// </summary>
+    /// <param name="services">Контракт для коллекции дескрипторов служб</param>
+    /// <param name="configuration">Набор свойств конфигурации приложения</param>
+    /// <returns>Контракт для коллекции дескрипторов служб</returns>
+    public static IServiceCollection AddBaseConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        /// <summary>
-        /// Configure Services
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="conf"></param>
-        public static void Configure(IServiceCollection services, IConfiguration conf)
+        #region AddDbContext
+
+        services.AddDbContext<CatalogDbContext>(options => 
         {
-            #region AddDbContext
+            options.UseSqlServer(configuration.GetConnectionString("CatalogDbConnection"));
+        });
 
-            services.AddDbContext<ParserDbContext>(options =>
-                options.UseSqlServer(conf.GetConnectionString("ParserDbConnection")));
+        #endregion
 
-            services.AddDbContext<ProductDbContext>(options =>
-                options.UseSqlServer(conf.GetConnectionString("ProductDbConnection")));
+        #region AddWork
 
-            #endregion
+        services.AddUnitOfWork<CatalogDbContext>();
+        services.AddParser<CatalogDbContext, ParserBackgroundWorker>();
 
-            services.AddAutoMapper(typeof(Startup));
-            services.AddControllers()
-                .AddNewtonsoftJson().AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                });
+        #endregion
+        
+        services.AddAutoMapper(typeof(Startup));
 
-            #region AddUnitOfWork
+        services.AddControllers();
 
-            services.AddUnitOfWork<ParserDbContext>();
-            services.AddUnitOfWork<ProductDbContext>();
+        services.AddMemoryCache();
+        services.AddRouting();
+        services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+        services.AddOptions();
+        services.AddLocalization();
+        services.AddHttpContextAccessor();
+        services.AddResponseCaching();
+        services.AddAntiforgery();
 
-            #endregion
-
-            services.AddMemoryCache();
-            services.AddRouting();
-            services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
-            services.AddOptions();
-            services.AddLocalization();
-            services.AddHttpContextAccessor();
-            services.AddResponseCaching();
-            services.AddAntiforgery();
-        }
+        return services;
     }
 }

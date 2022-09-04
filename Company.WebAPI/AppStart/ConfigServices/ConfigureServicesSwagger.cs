@@ -1,5 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Reflection;
 
 namespace Company.WebAPI.AppStart.ConfigServices;
 
@@ -13,11 +14,12 @@ public static class ConfigureServicesSwagger
     private const string SwaggerConfig = "/swagger/v1/swagger.json";
 
     /// <summary>
-    /// ConfigureServices Swagger services
+    /// AddSwaggerConfigureServices Swagger services
     /// </summary>
-    /// <param name="services"></param>
-    /// <param name="configuration"></param>
-    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    /// <param name="services">Контракт для коллекции дескрипторов служб</param>
+    /// <param name="configuration">Набор свойств конфигурации приложения</param>
+    /// <returns>Контракт для коллекции дескрипторов служб</returns>
+    public static IServiceCollection AddSwaggerConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services!.AddSwaggerGen(options =>
         {
@@ -28,8 +30,13 @@ public static class ConfigureServicesSwagger
                 Description = "Microservice module API. This project based on .NET 6.0."
             });
 
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
             options.ResolveConflictingActions(x => x.First());
         });
+
+        return services;
     }
 
     /// <summary>

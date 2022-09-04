@@ -1,6 +1,6 @@
-﻿namespace Company.Entity
+﻿namespace Company.Entity;
+
+public class AppData
 {
-    public class AppData
-    {
-    }
+
 }
